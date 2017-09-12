@@ -118,7 +118,8 @@ class SegList(torch.utils.data.Dataset):
     def __getitem__(self, index):
         data = [Image.open(join(self.data_dir, self.image_list[index]))]
         if self.label_list is not None:
-            data.append(Image.open(join(self.data_dir, self.label_list[index])))
+            data.append(Image.open(
+                join(self.data_dir, self.label_list[index])))
         data = list(self.transforms(*data))
         if self.out_name:
             if self.label_list is None:
@@ -176,8 +177,8 @@ def validate(val_loader, model, criterion, eval_score=None, print_freq=10):
                   'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
                   'Loss {loss.val:.4f} ({loss.avg:.4f})\t'
                   'Score {score.val:.3f} ({score.avg:.3f})'.format(
-                   i, len(val_loader), batch_time=batch_time, loss=losses,
-                   score=score), flush=True)
+                      i, len(val_loader), batch_time=batch_time, loss=losses,
+                      score=score), flush=True)
 
     print(' * Score {top1.avg:.3f}'.format(top1=score))
 
@@ -186,6 +187,7 @@ def validate(val_loader, model, criterion, eval_score=None, print_freq=10):
 
 class AverageMeter(object):
     """Computes and stores the average and current value"""
+
     def __init__(self):
         self.reset()
 
@@ -265,8 +267,8 @@ def train(train_loader, model, criterion, optimizer, epoch,
                   'Data {data_time.val:.3f} ({data_time.avg:.3f})\t'
                   'Loss {loss.val:.4f} ({loss.avg:.4f})\t'
                   'Score {top1.val:.3f} ({top1.avg:.3f})'.format(
-                   epoch, i, len(train_loader), batch_time=batch_time,
-                   data_time=data_time, loss=losses, top1=scores))
+                      epoch, i, len(train_loader), batch_time=batch_time,
+                      data_time=data_time, loss=losses, top1=scores))
 
 
 def save_checkpoint(state, is_best, filename='checkpoint.pth.tar'):
@@ -405,17 +407,17 @@ def save_output_images(predictions, filenames, output_dir):
 
 
 def save_colorful_images(predictions, filenames, output_dir, palettes):
-   """
-   Saves a given (B x C x H x W) into an image file.
-   If given a mini-batch tensor, will save the tensor as a grid of images.
-   """
-   for ind in range(len(filenames)):
-       im = Image.fromarray(palettes[predictions[ind].squeeze()])
-       fn = os.path.join(output_dir, filenames[ind][:-4] + '.png')
-       out_dir = split(fn)[0]
-       if not exists(out_dir):
-           os.makedirs(out_dir)
-       im.save(fn)
+    """
+    Saves a given (B x C x H x W) into an image file.
+    If given a mini-batch tensor, will save the tensor as a grid of images.
+    """
+    for ind in range(len(filenames)):
+        im = Image.fromarray(palettes[predictions[ind].squeeze()])
+        fn = os.path.join(output_dir, filenames[ind][:-4] + '.png')
+        out_dir = split(fn)[0]
+        if not exists(out_dir):
+            os.makedirs(out_dir)
+        im.save(fn)
 
 
 def test(eval_data_loader, model, num_classes,
@@ -447,7 +449,7 @@ def test(eval_data_loader, model, num_classes,
               'Data {data_time.val:.3f} ({data_time.avg:.3f})\t'
               .format(iter, len(eval_data_loader), batch_time=batch_time,
                       data_time=data_time))
-    if has_gt: #val
+    if has_gt:  # val
         ious = per_class_iu(hist) * 100
         print(' '.join('{:.03f}'.format(i) for i in ious))
         return round(np.nanmean(ious), 2)
@@ -551,6 +553,7 @@ def main():
         train_seg(args)
     elif args.cmd == 'test':
         test_seg(args)
+
 
 if __name__ == '__main__':
     main()

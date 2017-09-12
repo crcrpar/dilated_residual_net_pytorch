@@ -75,7 +75,7 @@ class Pad(object):
     def __init__(self, padding, fill=0):
         assert isinstance(padding, numbers.Number)
         assert isinstance(fill, numbers.Number) or isinstance(fill, str) or \
-               isinstance(fill, tuple)
+            isinstance(fill, tuple)
         self.padding = padding
         self.fill = fill
 
@@ -104,7 +104,8 @@ class ToTensor(object):
             img = torch.from_numpy(pic)
         else:
             # handle PIL Image
-            img = torch.ByteTensor(torch.ByteStorage.from_buffer(pic.tobytes()))
+            img = torch.ByteTensor(
+                torch.ByteStorage.from_buffer(pic.tobytes()))
             # PIL image mode: 1, L, P, I, F, RGB, YCbCr, RGBA, CMYK
             if pic.mode == 'YCbCr':
                 nchannel = 3
